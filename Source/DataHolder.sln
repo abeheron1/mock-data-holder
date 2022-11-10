@@ -67,7 +67,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "070 Functions", "070 Functi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDR.GetDataRecipients.IntegrationTests", "CDR.GetDataRecipients.IntegrationTests\CDR.GetDataRecipients.IntegrationTests.csproj", "{E2AC9628-B7E0-4FFA-A218-544770C8D4E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDR.DataHolder.API.Logger", "CDR.DataHolder.API.Logger\CDR.DataHolder.API.Logger.csproj", "{CA30C6CF-B5A2-401A-B0E4-2015F86058D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDR.DataHolder.API.Logger", "CDR.DataHolder.API.Logger\CDR.DataHolder.API.Logger.csproj", "{CA30C6CF-B5A2-401A-B0E4-2015F86058D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{5EAF6E30-23F8-4094-BA9A-FF6F2FD4E47D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDR.DataHolder.Repository.UnitTests", "CDR.DataHolder.Repository.UnitTests\CDR.DataHolder.Repository.UnitTests.csproj", "{383D2DCD-A140-442B-8BB0-2E89A859AD3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +143,10 @@ Global
 		{CA30C6CF-B5A2-401A-B0E4-2015F86058D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA30C6CF-B5A2-401A-B0E4-2015F86058D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA30C6CF-B5A2-401A-B0E4-2015F86058D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{383D2DCD-A140-442B-8BB0-2E89A859AD3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{383D2DCD-A140-442B-8BB0-2E89A859AD3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{383D2DCD-A140-442B-8BB0-2E89A859AD3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{383D2DCD-A140-442B-8BB0-2E89A859AD3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,6 +169,8 @@ Global
 		{D333CBF2-8B13-4123-9761-F2D1825D7B19} = {FE6797E5-74EB-411B-9517-4862E5C0FA4B}
 		{E2AC9628-B7E0-4FFA-A218-544770C8D4E4} = {334094B2-2055-4954-9953-F731DC8C857F}
 		{CA30C6CF-B5A2-401A-B0E4-2015F86058D8} = {4B38DDC0-9F63-4B9B-84A2-C97B40EA2D23}
+		{5EAF6E30-23F8-4094-BA9A-FF6F2FD4E47D} = {E30B7B0A-7E6B-4F5F-968D-530C182C9EFB}
+		{383D2DCD-A140-442B-8BB0-2E89A859AD3E} = {5EAF6E30-23F8-4094-BA9A-FF6F2FD4E47D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE8E874B-11F7-494D-9902-AD374F1EC3B3}

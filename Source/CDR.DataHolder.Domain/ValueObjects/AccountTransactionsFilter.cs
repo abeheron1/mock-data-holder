@@ -16,6 +16,6 @@ namespace CDR.DataHolder.Domain.ValueObjects
 
         public string Text { get; set; }
 
-        public Guid CustomerId { get; set; }
+        public string CustomerId { get; set; }
     }
 }

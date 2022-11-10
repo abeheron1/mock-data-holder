@@ -28,6 +28,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="JsonFlatFileDataStore" Version="2.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
 		<PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
@@ -48,6 +49,12 @@
 	  <ProjectReference Include="..\CDR.DataHolder.API.Logger\CDR.DataHolder.API.Logger.csproj" />
 	  <ProjectReference Include="..\CDR.DataHolder.Domain\CDR.DataHolder.Domain.csproj" />
 	  <ProjectReference Include="..\CDR.DataHolder.Repository\CDR.DataHolder.Repository.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="banking-seed.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 </Project>

@@ -220,7 +220,7 @@ namespace CDR.DataHolder.IdentityServer.Controllers
 		{
 			// Fetch accounts and invalid accounts here.
 			// Improvement: These accounts are loaded every time the page loads. Maybe we can implement caching.
-			var allAccounts = (await _resourceRepository.GetAllAccountsByCustomerIdForConsent(Guid.Parse(User.GetSubjectId())))
+			var allAccounts = (await _resourceRepository.GetAllAccountsByCustomerIdForConsent(Guid.Parse(User.GetSubjectId()).ToString()))
 				.Select(acc => ConvertToAccountModel(acc));
 			if (allAccounts == null || !allAccounts.Any())
 			{

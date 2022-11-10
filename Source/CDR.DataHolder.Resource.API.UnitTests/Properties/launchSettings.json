@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CDR.DataHolder.Resource.API.UnitTests": {
+        //"commandName": "Project",
+        "environmentVariables": {
+            "kk": "8"
+        }
+    }
+  }
+}

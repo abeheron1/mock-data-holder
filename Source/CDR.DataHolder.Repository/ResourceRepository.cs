@@ -21,12 +21,12 @@ namespace CDR.DataHolder.Repository
 			this._mapper = mapper;
 		}
 
-		public async Task<Customer> GetCustomer(Guid customerId)
+		public async Task<Customer> GetCustomer(string customerId)
 		{
 			var customer = await _dataHolderDatabaseContext.Customers.AsNoTracking()
 				.Include(p => p.Person)
 				.Include(o => o.Organisation)
-				.FirstOrDefaultAsync(customer => customer.CustomerId == customerId);
+				.FirstOrDefaultAsync(customer => customer.CustomerId.ToString() == customerId);
 			if (customer == null)
 			{
 				return null;
@@ -78,7 +78,7 @@ namespace CDR.DataHolder.Repository
 				.Include(account => account.Customer)
 				.Where(account =>
 					filter.AllowedAccountIds.Contains(account.AccountId)	
-					&& account.Customer.CustomerId == filter.CustomerId);
+					&& account.Customer.CustomerId.ToString() == filter.CustomerId);
 
 			// Apply filters.
 			if (!string.IsNullOrEmpty(filter.OpenStatus))
@@ -111,9 +111,9 @@ namespace CDR.DataHolder.Repository
 		/// <param name="accountId">Account ID</param>
 		/// <param name="customerId">Customer ID</param>
 		/// <returns>True if the customer can access the account, otherwise false.</returns>
-		public async Task<bool> CanAccessAccount(string accountId, Guid customerId)
+		public async Task<bool> CanAccessAccount(string accountId, string customerId)
 		{
-			return await _dataHolderDatabaseContext.Accounts.AnyAsync(a => a.AccountId == accountId && a.CustomerId == customerId);
+			return await _dataHolderDatabaseContext.Accounts.AnyAsync(a => a.AccountId == accountId && a.CustomerId.ToString() == customerId);
 		}
 
 		/// <summary>
@@ -144,7 +144,7 @@ namespace CDR.DataHolder.Repository
 
             IQueryable<Entities.Transaction> accountTransactionsQuery = _dataHolderDatabaseContext
                             .Transactions.Include(x => x.Account).ThenInclude(x => x.Customer).AsNoTracking()
-                    .Where(t => t.AccountId == transactionsFilter.AccountId && t.Account.CustomerId == transactionsFilter.CustomerId)
+                    .Where(t => t.AccountId == transactionsFilter.AccountId && t.Account.CustomerId.ToString() == transactionsFilter.CustomerId)
 					// Oldest/Newest Time
 					//Newest
 					.WhereIf(transactionsFilter.NewestTime.HasValue,
@@ -180,11 +180,11 @@ namespace CDR.DataHolder.Repository
             return result;
         }
 
-        public async Task<Account[]> GetAllAccountsByCustomerIdForConsent(Guid customerId)
+        public async Task<Account[]> GetAllAccountsByCustomerIdForConsent(string customerId)
         {
             var allAccounts = await _dataHolderDatabaseContext.Accounts.AsNoTracking()
                 .Include(account => account.Customer)
-                .Where(account => account.Customer.CustomerId == customerId)
+                .Where(account => account.Customer.CustomerId.ToString() == customerId)
                 .OrderBy(account => account.DisplayName).ThenBy(account => account.AccountId)
                 .ToListAsync();
 

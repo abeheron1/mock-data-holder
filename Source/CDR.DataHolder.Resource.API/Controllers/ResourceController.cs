@@ -68,7 +68,7 @@ namespace CDR.DataHolder.Resource.API.Controllers
 			// Therefore we need to look up the CustomerClient table to find the actual customer id.
 			// This can be done once we have a client id (Registration) and a valid access token.
 			var customerId = GetCustomerId(this.User);
-			if (customerId == Guid.Empty)
+			if (customerId == string.Empty)
 			{
 				// Implement response handling when the acceptance criteria is available.
 				return BadRequest();
@@ -113,8 +113,8 @@ namespace CDR.DataHolder.Resource.API.Controllers
 			//LogContext.PushProperty("client_id", ((ClaimsIdentity)this.User.Identity).FindFirst("client_id"));
 
 			var customerId = GetCustomerId(this.User);
-			if (customerId == Guid.Empty)
-			{
+            if (customerId == string.Empty)
+            {
 				return new BadRequestObjectResult(new ResponseErrorList(Error.UnknownError()));
 			}
 
@@ -172,7 +172,7 @@ namespace CDR.DataHolder.Resource.API.Controllers
 			// Therefore we need to look up the CustomerClient table to find the actual customer id.
 			// This can be done once we have a client id (Registration) and a valid access token.
 			request.CustomerId = GetCustomerId(this.User);
-			if (request.CustomerId == Guid.Empty)
+			if (request.CustomerId == string.Empty)
 			{
 				return new BadRequestObjectResult(new ResponseErrorList(Error.UnknownError()));
 			}
@@ -314,14 +314,9 @@ namespace CDR.DataHolder.Resource.API.Controllers
             return errorList;
 		}
 
-		private static Guid GetCustomerId(ClaimsPrincipal principal)
+		private static string GetCustomerId(ClaimsPrincipal principal)
 		{
-			var customerId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (!Guid.TryParse(customerId, out var customerIdGuid))
-			{
-				return Guid.Empty;
-			}
-			return customerIdGuid;
+			return principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 		}
 
 		private static string[] GetAccountIds(ClaimsPrincipal principal)

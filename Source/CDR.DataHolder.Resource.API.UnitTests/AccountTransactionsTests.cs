@@ -32,6 +32,100 @@ namespace CDR.DataHolder.Resource.API.UnitTests
         }
 
         [Fact]
+        public async Task GetAccounts()
+        {
+            //Arrange
+            var resourceRepository = _serviceProvider.GetRequiredService<IResourceRepository>();
+            var statusRepository = _serviceProvider.GetRequiredService<IStatusRepository>();
+            var transactionsService = _serviceProvider.GetRequiredService<ITransactionsService>();
+            var idPermanenceManager = _serviceProvider.GetRequiredService<IIdPermanenceManager>();
+            var loggerFactory = _serviceProvider.GetRequiredService<ILoggerFactory>();
+            var config = _serviceProvider.GetRequiredService<IConfiguration>();
+            var logger = loggerFactory.CreateLogger<ResourceController>();
+            var resourceBaseUri = config.GetValue<string>("ResourceBaseUri");
+
+            //Generate Account Permanence Id
+            var idParameters = new IdPermanenceParameters
+            {
+                SoftwareProductId = "c6327f87-687a-4369-99a4-eaacd3bb8210",
+                CustomerId = "4EE1A8DB-13AF-44D7-B54B-E94DFF3DF548",
+            };
+
+            //var idParameters = new IdPermanenceParameters
+            //{
+            //    SoftwareProductId = "8C636A38-E3FF-4F6A-9319-B9BA3EE10831", // just testing from the file client cache
+            //    CustomerId = "100451449"
+            //};
+
+            var accountId = "1122334455";
+            var accountPermanenceId = idPermanenceManager.EncryptId(accountId, idParameters);
+
+            var request = new Mock<HttpRequest>();
+            request.Setup(x => x.Scheme).Returns("https");
+            request.Setup(x => x.Host).Returns(HostString.FromUriComponent("localhost:8003"));
+            request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent($"/cds-au/v1/banking/accounts/{accountPermanenceId}/transactions?oldest-time=2021-04-01T00:00:00Z&newest-time=2021-06-01T00:00:00Z&page=1&page-size=10"));
+            request.Setup(x => x.Headers).Returns(new HeaderDictionary() { { "x-v", "1" } });
+
+            var httpContext = Mock.Of<HttpContext>(_ =>
+                _.Request == request.Object
+            );
+
+            var actionContext = new ActionContext(httpContext, new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
+            actionContext.HttpContext = httpContext;
+
+            var mockUrlHelper = new Mock<IUrlHelper>();
+            mockUrlHelper.Setup(x => x.ActionContext).Returns(actionContext);
+            mockUrlHelper.Setup(x => x.RouteUrl(It.IsAny<UrlRouteContext>())).Returns($"cds-au/v1/banking/accounts/{accountPermanenceId}/transactions?oldest-time=2021-04-01T00:00:00Z&newest-time=2021-06-01T00:00:00Z&page=1&page-size=10");
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "4EE1A8DB-13AF-44D7-B54B-E94DFF3DF548"),
+                new Claim("software_id", "c6327f87-687a-4369-99a4-eaacd3bb8210"),
+                new Claim("client_id", Guid.NewGuid().ToString()),
+                new Claim("account_id", accountId)
+            }, "mock"));
+
+            //var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            //{
+            //     new Claim(ClaimTypes.NameIdentifier, "100451449"),
+            //     new Claim("software_id", "8C636A38-E3FF-4F6A-9319-B9BA3EE10831"),
+            //     new Claim("client_id", Guid.NewGuid().ToString()),
+            //     new Claim("account_id", accountId)
+            //}, "mock"));
+
+            httpContext.User = user;
+
+            var controllerContext = new ControllerContext(actionContext)
+            {
+                HttpContext = httpContext
+            };
+
+            var controller = new ResourceController(resourceRepository, statusRepository, config, null, logger, transactionsService, idPermanenceManager);
+            controller.ControllerContext = controllerContext;
+            controller.Url = mockUrlHelper.Object;
+
+            //Act
+            //var res = await controller.GetAccounts(new RequestAccountTransactions)
+
+            var result = await controller.GetTransactions(new RequestAccountTransactions
+            {
+                AccountId = accountPermanenceId,
+                MaxAmount = 320,
+                MinAmount = 0,
+                OldestTime = new DateTime(2021, 4, 01),
+                NewestTime = new DateTime(2021, 6, 01),
+                Page = "1",
+                PageSize = "10"
+            }) as OkObjectResult;
+
+            var response = result.Value as ResponseAccountTransactions;
+
+            //Assert
+            Assert.True(1 == 1);
+
+        }
+
+        [Fact]
         public async Task GetTransactions_TimeFilter_Success()
         {
             //Arrange

@@ -17,6 +17,7 @@
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
     <None Remove="appsettings.Release.json" />
+    <None Remove="Data\banking-seed.json" />
     <None Remove="Data\seed-data.json" />
   </ItemGroup>
 
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Data\banking-seed.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\seed-data.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -75,5 +79,7 @@
     <ProjectReference Include="..\CDR.DataHolder.Repository\CDR.DataHolder.Repository.csproj" />
     <ProjectReference Include="..\CDR.DataHolder.Resource.API\CDR.DataHolder.Resource.API.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties data_4seed-data_1json__JsonSchema="https://gitlab.com/fdroid/fdroiddata/-/raw/master/schemas/metadata.json" /></VisualStudio></ProjectExtensions>
 
 </Project>

@@ -1,3 +1,4 @@
+using AutoMapper;
 using CDR.DataHolder.API.Infrastructure.Authorisation;
 using CDR.DataHolder.API.Infrastructure.Authorization;
 using CDR.DataHolder.API.Infrastructure.Filters;
@@ -46,7 +47,8 @@ namespace CDR.DataHolder.Resource.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IResourceRepository, ResourceRepository>();
+
+            AddResourceRepository(services);
             services.AddScoped<IStatusRepository, StatusRepository>();
             services.AddScoped<ITransactionsService, TransactionsService>();
             services.AddScoped<ResourceAuthoriseErrorHandlingMiddleware>();
@@ -94,6 +96,24 @@ namespace CDR.DataHolder.Resource.API
                 Log.Logger.Information("Adding request response logging middleware");
                 services.AddRequestResponseLogging();
             }
+        }
+
+        private void AddResourceRepository(IServiceCollection services)
+        {
+            services.AddScoped<IResourceRepository>((serviceProvider) =>
+            {
+                if (Configuration.GetValue<bool>("JsonRepository:IsActive"))
+                {
+                    return new JsonResourceRepository(
+                        Configuration.GetValue<string>("JsonRepository:Path"), 
+                        Configuration.GetValue<string>("JsonRepository:DataHolderId"), 
+                        serviceProvider.GetService<IMapper>());
+                }
+                else
+                {
+                    return new ResourceRepository(serviceProvider.GetService<DataHolderDatabaseContext>(), serviceProvider.GetService<IMapper>());
+                }
+            });
         }
 
         private static void AddAuthenticationAuthorization(IServiceCollection services, IConfiguration configuration)
